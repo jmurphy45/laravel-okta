@@ -27,10 +27,10 @@ class OktaUser
         $response = $this->getHttpClient()
             ->addAuthorizationHeader(config('okta_api_token'))
             ->addHeaders([
-                'Accept' => '',
-                'Content-Type' => '',
-                'Authorization' => 'SSWS ',
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
             ])
+            ->addAuthorizationHeader(config('okta_base_url'))
             ->get('/api/v1/users/' . $userID);
         return $response->json();
     }

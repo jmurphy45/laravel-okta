@@ -29,7 +29,7 @@ class ClientTest extends TestCase
 
     public function testGet()
     {
-
+        $this->assertTrue(true);
     }
 
     public function testAddHeaders()

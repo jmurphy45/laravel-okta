@@ -71,7 +71,7 @@ class Client implements HttpClientInterface
      */
     protected function parseRequestURl(string $path): string
     {
-        return config('okta_api_token') . $path;
+        return config('okta_base_url') . $path;
     }
 
 
