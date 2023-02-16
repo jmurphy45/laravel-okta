@@ -30,7 +30,7 @@ class Client implements HttpClientInterface
     /**
      * @return Factory
      */
-    public function getHttpClient(): Factory
+    public function getHttpClient(): HttpClientInterface
     {
         return $this->httpClient;
     }
@@ -49,9 +49,8 @@ class Client implements HttpClientInterface
      */
     public function addAuthorizationHeader(string $token): Client
     {
-        $this
-            ->addHeaders([
-                'Authorization' => 'SSWS' . $token
+        $this->addHeaders([
+                'Authorization' => 'SSWS ' . $token
             ]);
         return $this;
     }
@@ -62,7 +61,7 @@ class Client implements HttpClientInterface
      */
     public function addHeaders(array $headers): Client
     {
-        $this->headers = array_merge($this->headers,$headers);
+       $this->headers = array_merge($this->getHeaders(),$headers);
         return $this;
     }
 

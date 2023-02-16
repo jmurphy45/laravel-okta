@@ -1,0 +1,1 @@
+{"version":1,"defects":{"Jmurphy\\LaravelOkta\\Tests\\ClientTest::testAddAuthorizationHeader":3},"times":{"Jmurphy\\LaravelOkta\\Tests\\ClientTest::testAddAuthorizationHeader":0.014,"Jmurphy\\LaravelOkta\\Tests\\ClientTest::testAddHeaders":0.012}}
