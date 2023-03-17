@@ -2,22 +2,22 @@
 
 namespace Jmurphy\LaravelOkta\Okta\User;
 
-use Jmurphy\LaravelOkta\Okta\Entities\User\User;
-use Jmurphy\LaravelOkta\Okta\HttpClientInterface;
+use Jmurphy\LaravelOkta\Okta\Entities\User\UserClient;
+use Jmurphy\LaravelOkta\Okta\HttpClientAdapterInterface;
 
 class OktaUser
 {
     private $httpClient;
 
-    public function __construct(HttpClientInterface $httpClient)
+    public function __construct(HttpClientAdapterInterface $httpClient)
     {
         $this->httpClient = $httpClient;
     }
 
     /**
-     * @return HttpClientInterface
+     * @return HttpClientAdapterInterface
      */
-    public function getHttpClient(): HttpClientInterface
+    public function getHttpClient(): HttpClientAdapterInterface
     {
         return $this->httpClient;
     }
