@@ -3,7 +3,6 @@
 namespace Jmurphy\LaravelOkta\Okta\Entities\User;
 
 use Jmurphy\LaravelOkta\Okta\HttpClientAdapterInterface;
-use Jmurphy\LaravelOkta\Okta\User\OktaUser;
 
 class UserClient implements OktaUserClientInterface
 {
