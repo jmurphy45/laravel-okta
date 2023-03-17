@@ -9,6 +9,9 @@ use Jmurphy\LaravelOkta\Okta\HttpClientAdapterInterface;
 
 class LaravelHttpFacadeAdapter implements \Jmurphy\LaravelOkta\Okta\HttpClientAdapterInterface
 {
+    public function __construct()
+    {
+    }
 
     /**
      * Send a GET request using Laravel's HTTP kernel.

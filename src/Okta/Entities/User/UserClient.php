@@ -2,19 +2,13 @@
 
 namespace Jmurphy\LaravelOkta\Okta\Entities\User;
 
+use Illuminate\Support\Facades\App;
+use Jmurphy\LaravelOkta\Okta\BaseClient;
+use Jmurphy\LaravelOkta\Okta\ConfigRepository as OktaConfigRepository;
 use Jmurphy\LaravelOkta\Okta\HttpClientAdapterInterface;
 
-class UserClient implements OktaUserClientInterface
+class UserClient extends BaseClient implements OktaUserClientInterface
 {
-    private $httpClientAdapter;
-    private $baseUrl;
-
-    public function __construct(HttpClientAdapterInterface $httpClientAdapter)
-    {
-        $this->httpClientAdapter = $httpClientAdapter;
-        $this->baseUrl = config('okta.baseUrl');
-    }
-
     public function getUser($userId)
     {
         $url = $this->baseUrl . "/api/v1/users/{$userId}";
@@ -37,7 +31,13 @@ class UserClient implements OktaUserClientInterface
     {
         $url = $this->baseUrl . '/api/v1/users';
 
-        return $this->httpClientAdapter->post($url, $userData);
+        $headers = [
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'SSWS ' . $this->getOktaConfigRepository()->getApiKey(),
+        ];
+
+        return $this->httpClientAdapter->post($url, $userData,$headers);
     }
 
     public function updateUser($userId, $userData)
@@ -152,5 +152,6 @@ class UserClient implements OktaUserClientInterface
 
         return $this->httpClientAdapter->delete($url);
     }
+
 }
 

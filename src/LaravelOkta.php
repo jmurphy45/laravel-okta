@@ -16,11 +16,10 @@ class LaravelOkta
     public function __construct()
     {
         // create an instance of your adapter class
-        $httpClientAdapter = new LaravelHttpFacadeAdapter();
-
+        $this->httpClientAdapter = new LaravelHttpFacadeAdapter();
     }
 
-    public function user()
+    public function user(): UserClient
     {
         return new UserClient($this->getHttpClientAdapter());
     }

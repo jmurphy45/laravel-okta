@@ -22,7 +22,7 @@ interface HttpClientAdapterInterface
      * @param array $options An array of request options.
      * @return mixed The response body.
      */
-    public function post($url, $options = []);
+    public function post($url, $options = [], $headers = []);
 
     /**
      * Send a PUT request.
