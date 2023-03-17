@@ -8,7 +8,7 @@ use Jmurphy\LaravelOkta\Okta\ConfigRepository as OktaConfigRepository;
 class BaseClient
 {
     private $oktaConfigRepository;
-    private $httpClientAdapter;
+    protected $httpClientAdapter;
 
     public function __construct(
         HttpClientAdapterInterface $httpClientAdapter

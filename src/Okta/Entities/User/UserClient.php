@@ -11,14 +11,14 @@ class UserClient extends BaseClient implements OktaUserClientInterface
 {
     public function getUser($userId)
     {
-        $url = $this->baseUrl . "/api/v1/users/{$userId}";
+        $url =  "/api/v1/users/{$userId}";
 
         return $this->httpClientAdapter->get($url);
     }
 
     public function getUsers($queryParameters = [])
     {
-        $url = $this->baseUrl . '/api/v1/users';
+        $url =  '/api/v1/users';
 
         if (!empty($queryParameters)) {
             $url .= '?' . http_build_query($queryParameters);
@@ -29,7 +29,7 @@ class UserClient extends BaseClient implements OktaUserClientInterface
 
     public function createUser($userData)
     {
-        $url = $this->baseUrl . '/api/v1/users';
+        $url =  '/api/v1/users';
 
         $headers = [
             'Accept' => 'application/json',
@@ -42,14 +42,14 @@ class UserClient extends BaseClient implements OktaUserClientInterface
 
     public function updateUser($userId, $userData)
     {
-        $url = $this->baseUrl . "/api/v1/users/{$userId}";
+        $url =  "/api/v1/users/{$userId}";
 
         return $this->httpClientAdapter->put($url, $userData);
     }
 
     public function deleteUser($userId)
     {
-        $url = $this->baseUrl . "/api/v1/users/{$userId}";
+        $url =  "/api/v1/users/{$userId}";
 
         return $this->httpClientAdapter->delete($url);
     }
@@ -57,14 +57,14 @@ class UserClient extends BaseClient implements OktaUserClientInterface
     //related resources
     public function getUserGroups($userId)
     {
-        $url = $this->baseUrl . "/api/v1/users/{$userId}/groups";
+        $url =  "/api/v1/users/{$userId}/groups";
 
         return $this->httpClientAdapter->get($url);
     }
 
     public function getUserApps($userId)
     {
-        $url = $this->baseUrl . "/api/v1/users/{$userId}/appLinks";
+        $url =  "/api/v1/users/{$userId}/appLinks";
 
         return $this->httpClientAdapter->get($url);
     }
@@ -72,7 +72,7 @@ class UserClient extends BaseClient implements OktaUserClientInterface
     //life cycle operations
     public function suspendUser($userId)
     {
-        $url = $this->baseUrl . "/api/v1/users/{$userId}/lifecycle/suspend";
+        $url =  "/api/v1/users/{$userId}/lifecycle/suspend";
         $data = [
             'suspendUser' => true
         ];
@@ -82,7 +82,7 @@ class UserClient extends BaseClient implements OktaUserClientInterface
 
     public function unsuspendUser($userId)
     {
-        $url = $this->baseUrl . "/api/v1/users/{$userId}/lifecycle/unsuspend";
+        $url =  "/api/v1/users/{$userId}/lifecycle/unsuspend";
         $data = [
             'unsuspendUser' => true
         ];
@@ -92,7 +92,7 @@ class UserClient extends BaseClient implements OktaUserClientInterface
 
     public function deactivateUser($userId)
     {
-        $url = $this->baseUrl . "/api/v1/users/{$userId}/lifecycle/deactivate";
+        $url =  "/api/v1/users/{$userId}/lifecycle/deactivate";
         $data = [
             'deactivate' => true
         ];
@@ -102,7 +102,7 @@ class UserClient extends BaseClient implements OktaUserClientInterface
 
     public function reactivateUser($userId)
     {
-        $url = $this->baseUrl . "/api/v1/users/{$userId}/lifecycle/reactivate";
+        $url =  "/api/v1/users/{$userId}/lifecycle/reactivate";
         $data = [
             'reactivate' => true
         ];
@@ -113,42 +113,42 @@ class UserClient extends BaseClient implements OktaUserClientInterface
     //user session
     public function getUserSessions($userId)
     {
-        $url = $this->baseUrl . "/api/v1/users/{$userId}/sessions";
+        $url =  "/api/v1/users/{$userId}/sessions";
 
         return $this->httpClientAdapter->get($url);
     }
 
     public function revokeUserSession($userId, $sessionId)
     {
-        $url = $this->baseUrl . "/api/v1/users/{$userId}/sessions/{$sessionId}";
+        $url =  "/api/v1/users/{$userId}/sessions/{$sessionId}";
 
         return $this->httpClientAdapter->delete($url);
     }
 
     public function listUserCredentials($userId)
     {
-        $url = $this->baseUrl . "/api/v1/users/{$userId}/credentials";
+        $url =  "/api/v1/users/{$userId}/credentials";
 
         return $this->httpClientAdapter->get($url);
     }
 
     public function addUserCredential($userId, $credentialData)
     {
-        $url = $this->baseUrl . "/api/v1/users/{$userId}/credentials";
+        $url =  "/api/v1/users/{$userId}/credentials";
 
         return $this->httpClientAdapter->post($url, $credentialData);
     }
 
     public function updateUserCredential($userId, $credentialId, $credentialData)
     {
-        $url = $this->baseUrl . "/api/v1/users/{$userId}/credentials/{$credentialId}";
+        $url =  "/api/v1/users/{$userId}/credentials/{$credentialId}";
 
         return $this->httpClientAdapter->post($url, $credentialData);
     }
 
     public function deleteUserCredential($userId, $credentialId)
     {
-        $url = $this->baseUrl . "/api/v1/users/{$userId}/credentials/{$credentialId}";
+        $url =  "/api/v1/users/{$userId}/credentials/{$credentialId}";
 
         return $this->httpClientAdapter->delete($url);
     }
