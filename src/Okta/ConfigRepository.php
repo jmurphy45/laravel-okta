@@ -4,16 +4,32 @@ namespace Jmurphy\LaravelOkta\Okta;
 
 final class ConfigRepository
 {
-    private $baseUrl;
-    private $apiKey;
+    private static $instance = null;
 
-    public function __construct(
-        string $baseUrl,
-        string $apiKey
+//    private $baseUrl;
+//    private $apiKey;
+        private $config;
+
+    private function __construct(
+//        string $baseUrl,
+//        string $apiKey
     )
     {
-        $this->baseUrl = $baseUrl;
-        $this->apiKey = $this->apiKey;
+//        $this->baseUrl = $baseUrl;
+//        $this->apiKey = $apiKey;
+        $this->config = config('laravel-okta');
+    }
+
+    // The object is created from within the class itself
+    // only if the class has no instance.
+    public static function getInstance()
+    {
+        if (self::$instance == null)
+        {
+            self::$instance = new ConfigRepository();
+        }
+
+        return self::$instance;
     }
 
     /**
@@ -21,14 +37,14 @@ final class ConfigRepository
      */
     public function getBaseUrl(): string
     {
-        return $this->baseUrl;
+        return $this->config['okta_base_url'];
     }
 
     /**
      * @return mixed
      */
-    public function getApiKey()
+    public function getApiKey(): string
     {
-        return $this->apiKey;
+        return $this->config['okta_api_token'];
     }
 }

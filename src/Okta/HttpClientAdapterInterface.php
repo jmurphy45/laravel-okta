@@ -13,25 +13,27 @@ interface HttpClientAdapterInterface
      * @param array $options An array of request options.
      * @return mixed The response body.
      */
-    public function get($url, $options = []);
+    public function get($url, $options = [], $headers = []);
 
     /**
      * Send a POST request.
      *
      * @param string $url The URL to send the request to.
+     * * @param array $data An array of request options.
      * @param array $options An array of request options.
      * @return mixed The response body.
      */
-    public function post($url, $options = [], $headers = []);
+    public function post(string $url, array $options = [], array $data = [], array $headers = []);
 
     /**
      * Send a PUT request.
      *
      * @param string $url The URL to send the request to.
      * @param array $options An array of request options.
+     * @param array $data
      * @return mixed The response body.
      */
-    public function put($url, $options = []);
+    public function put($url, array $options = [], array $data = [], array $headers = []);
 
     /**
      * Send a PATCH request.
@@ -49,6 +51,6 @@ interface HttpClientAdapterInterface
      * @param array $options An array of request options.
      * @return mixed The response body.
      */
-    public function delete($url, $options = []);
+    public function delete($url, $queryParameters = [], $data = [], $headers = []);
 }
 

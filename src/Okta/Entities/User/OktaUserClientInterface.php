@@ -10,7 +10,7 @@ interface OktaUserClientInterface
      * @param string $userId The ID of the user to retrieve.
      * @return object The user object.
      */
-    public function getUser($userId);
+    public function getUser(string $userId);
 
     /**
      * Get a list of all users in the Okta organization.
@@ -83,7 +83,7 @@ interface OktaUserClientInterface
      * @param string $userId The ID of the user to deactivate.
      * @return void
      */
-    public function deactivateUser($userId);
+    public function deactivateUser($userId, bool $sendEmail);
 
     /**
      * Reactivate a user.
@@ -91,58 +91,19 @@ interface OktaUserClientInterface
      * @param string $userId The ID of the user to reactivate.
      * @return void
      */
-    public function reactivateUser($userId);
-
-    /**
-     * Get a list of sessions for a user.
-     *
-     * @param string $userId The ID of the user to get sessions for.
-     * @return array An array of session objects.
-     */
-    public function getUserSessions($userId);
+    public function reactivateUser($userId, bool $sendEmail);
 
     /**
      * Revoke a user session.
      *
      * @param string $userId The ID of the user whose session to revoke.
-     * @param string $sessionId The ID of the session to revoke.
      * @return void
      */
-    public function revokeUserSession($userId, $sessionId);
+    public function revokeUserSession($userId);
 
-    /**
-     * Get a list of credentials for a user.
-     *
-     * @param string $userId The ID of the user to get credentials for.
-     * @return array An array of credential objects.
-     */
-    public function listUserCredentials($userId);
+    public function forgotPasswordLink(string $userId, bool $sendEmail);
 
-    /**
-     * Add a new credential for a user.
-     *
-     * @param string $userId The ID of the user to add the credential for.
-     * @param array $credentialData An array of credential data to add.
-     * @return object The newly added credential object.
-     */
-    public function addUserCredential($userId, $credentialData);
+    public function forgotPassword(string $userId, string $password, string $securityQuestionAnswer);
 
-    /**
-     * Update an existing credential for a user.
-     *
-     * @param string $userId The ID of the user who owns the credential.
-     * @param string $credentialId The ID of the credential to update.
-     * @param array $credentialData An array of credential data to update.
-     * @return object The updated credential object.
-     */
-    public function updateUserCredential($userId, $credentialId, $credentialData);
-
-    /**
-     * Delete a credential for a user.
-     *
-     * @param string $userId The ID of the user who owns the credential.
-     * @param string $credentialId The ID of the credential to delete.
-     * @return void
-     */
-    public function deleteUserCredential($userId, $credentialId);
+    public function changeRecoveryQuestion(string $userId, $password, $recoveryQuestion, $recoveryQuestionAnswer);
 }

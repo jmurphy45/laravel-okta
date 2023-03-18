@@ -12,5 +12,7 @@
   </testsuites>
   <php>
     <env name="CACHE_DRIVER" value="array"/>
+    <env name="OKTA_API_TOKEN" value="test_api" />
+    <env name="OKTA_BASE_URL" value="https://okta.com" />
   </php>
 </phpunit>

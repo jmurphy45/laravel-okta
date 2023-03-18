@@ -2,16 +2,35 @@
 
 namespace Jmurphy\LaravelOkta\Okta\HttpAdapter;
 
-use Illuminate\Http\Client\Response;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
-use Jmurphy\LaravelOkta\Okta\ClientAdapter;
-use Jmurphy\LaravelOkta\Okta\ConfigRepository as OktaConfigRepository;
+use Jmurphy\LaravelOkta\Okta\ConfigRepository;
 use Jmurphy\LaravelOkta\Okta\HttpClientAdapterInterface;
 
-class LaravelHttpFacadeAdapter implements \Jmurphy\LaravelOkta\Okta\HttpClientAdapterInterface
+class LaravelHttpFacadeAdapter implements HttpClientAdapterInterface
 {
     private $oktaConfigRepository;
+
+    public function __construct()
+    {
+        $this->oktaConfigRepository = ConfigRepository::getInstance();
+    }
+
+    private function mergeHeaders(array $headers): array
+    {
+        return array_merge($headers, $this->getBaseHeaders());
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getBaseHeaders(): array
+    {
+        return [
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+            'Authorization' => 'SSWS ' . $this->getOktaConfigRepository()->getApiKey(),
+        ];
+    }
 
     /**
      * @return mixed
@@ -21,12 +40,19 @@ class LaravelHttpFacadeAdapter implements \Jmurphy\LaravelOkta\Okta\HttpClientAd
         return $this->oktaConfigRepository;
     }
 
-
-    public function __construct()
+    /**
+     * @param string $path
+     * @param array $queryParameters
+     * @return string
+     */
+    private function generateUrl(string $path, array $queryParameters = []): string
     {
-        $this->oktaConfigRepository = App::make(OktaConfigRepository::class);
-    }
+        if (!empty($queryParameters)) {
+            $path .= '?' . http_build_query($queryParameters);
+        }
 
+        return $this->getOktaConfigRepository()->getBaseUrl() . $path;
+    }
 
     /**
      * Send a GET request using Laravel's HTTP kernel.
@@ -35,9 +61,10 @@ class LaravelHttpFacadeAdapter implements \Jmurphy\LaravelOkta\Okta\HttpClientAd
      * @param array $options An array of request options.
      * @return mixed The response body.
      */
-    public function get($url, $options = [])
+    public function get($url, $options = [], $headers = [])
     {
-        $response = Http::get($this->generateUrl($url), $options);
+        $response = Http::withHeaders($this->mergeHeaders($headers))
+            ->get($this->generateUrl($url), $options);
 
         return $response->body();
     }
@@ -49,9 +76,10 @@ class LaravelHttpFacadeAdapter implements \Jmurphy\LaravelOkta\Okta\HttpClientAd
      * @param array $options An array of request options.
      * @return mixed The response body.
      */
-    public function post($url, $data = [], $options = [])
+    public function post($url, array $options = [], array $data = [], array $headers = [])
     {
-        $response = Http::post($this->generateUrl($url), $data, $options);
+        $response = Http::withHeaders($this->mergeHeaders($headers))
+            ->post($this->generateUrl($url,$options), $data);
 
         return $response->body();
     }
@@ -63,9 +91,10 @@ class LaravelHttpFacadeAdapter implements \Jmurphy\LaravelOkta\Okta\HttpClientAd
      * @param array $options An array of request options.
      * @return mixed The response body.
      */
-    public function delete($url, $data = [])
+    public function delete($url, $queryParameters = [], $data = [], $headers = [])
     {
-        $response = Http::delete($this->generateUrl($url), $data);
+        $response = Http::withHeaders($this->mergeHeaders($headers))
+            ->delete($this->generateUrl($url), $data);
 
         return $response->body();
     }
@@ -77,9 +106,12 @@ class LaravelHttpFacadeAdapter implements \Jmurphy\LaravelOkta\Okta\HttpClientAd
      * @param array $options An array of request options.
      * @return mixed The response body.
      */
-    public function put($url, $options = [])
+    public function put($url, $options = [], $data = [], $headers = [])
     {
-        // TODO: Implement put() method.
+        $response = Http::withHeaders($this->mergeHeaders($headers))
+            ->post($this->generateUrl($url,$options), $data);
+
+        return $response->body();
     }
 
     /**
@@ -92,14 +124,5 @@ class LaravelHttpFacadeAdapter implements \Jmurphy\LaravelOkta\Okta\HttpClientAd
     public function patch($url, $options = [])
     {
         // TODO: Implement patch() method.
-    }
-
-    /**
-     * @param string $path
-     * @return string
-     */
-    private function generateUrl(string $path): string
-    {
-        return  $this->getOktaConfigRepository()->getBaseUrl() .  $path;
     }
 }

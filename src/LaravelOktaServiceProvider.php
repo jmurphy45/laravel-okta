@@ -2,6 +2,7 @@
 
 namespace Jmurphy\LaravelOkta;
 
+use Illuminate\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Jmurphy\LaravelOkta\Okta\ConfigRepository;
 
@@ -53,19 +54,16 @@ class LaravelOktaServiceProvider extends ServiceProvider
         // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'laravel-okta');
 
-        $this->app->bind(ConfigRepository::class, function ($app) {
-            return new ConfigRepository(
-                config('okta.baseUrl'),
-                config('okta.apiKey')
-            );
-        });
+//        $this->app->bind(ConfigRepository::class, function (Application $app) {
+//            return new ConfigRepository(
+//               $app['config']->get('laravel-okta.okta_base_url'),
+//               $app['config']->get('laravel-okta.okta_api_token')
+//            );
+//        });
 
         // Register the main class to use with the facade
         $this->app->singleton('laravel-okta', function () {
-            return new LaravelOkta(
-                '',
-                ''
-            );
+            return new LaravelOkta;
         });
     }
 }

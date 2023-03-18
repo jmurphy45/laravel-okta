@@ -2,14 +2,11 @@
 
 namespace Jmurphy\LaravelOkta\Okta\Entities\User;
 
-use Illuminate\Support\Facades\App;
 use Jmurphy\LaravelOkta\Okta\BaseClient;
-use Jmurphy\LaravelOkta\Okta\ConfigRepository as OktaConfigRepository;
-use Jmurphy\LaravelOkta\Okta\HttpClientAdapterInterface;
 
 class UserClient extends BaseClient implements OktaUserClientInterface
 {
-    public function getUser($userId)
+    public function getUser(string $userId)
     {
         $url =  "/api/v1/users/{$userId}";
 
@@ -20,31 +17,21 @@ class UserClient extends BaseClient implements OktaUserClientInterface
     {
         $url =  '/api/v1/users';
 
-        if (!empty($queryParameters)) {
-            $url .= '?' . http_build_query($queryParameters);
-        }
-
-        return $this->httpClientAdapter->get($url);
+        return $this->httpClientAdapter->get($url, $queryParameters);
     }
 
-    public function createUser($userData)
+    public function createUser($userData, array $queryParameters = [])
     {
         $url =  '/api/v1/users';
 
-        $headers = [
-            'Accept' => 'application/json',
-            'Content-Type' => 'application/json',
-            'Authorization' => 'SSWS ' . $this->getOktaConfigRepository()->getApiKey(),
-        ];
-
-        return $this->httpClientAdapter->post($url, $userData,$headers);
+        return $this->httpClientAdapter->post($url,$queryParameters ,$userData);
     }
 
     public function updateUser($userId, $userData)
     {
         $url =  "/api/v1/users/{$userId}";
 
-        return $this->httpClientAdapter->put($url, $userData);
+        return $this->httpClientAdapter->post($url, [], $userData);
     }
 
     public function deleteUser($userId)
@@ -73,84 +60,83 @@ class UserClient extends BaseClient implements OktaUserClientInterface
     public function suspendUser($userId)
     {
         $url =  "/api/v1/users/{$userId}/lifecycle/suspend";
-        $data = [
-            'suspendUser' => true
-        ];
 
-        return $this->httpClientAdapter->post($url, $data);
+        return $this->httpClientAdapter->post($url);
     }
 
     public function unsuspendUser($userId)
     {
         $url =  "/api/v1/users/{$userId}/lifecycle/unsuspend";
-        $data = [
-            'unsuspendUser' => true
-        ];
 
-        return $this->httpClientAdapter->post($url, $data);
+        return $this->httpClientAdapter->post($url);
     }
 
-    public function deactivateUser($userId)
+    public function deactivateUser($userId, bool $sendEmail)
     {
         $url =  "/api/v1/users/{$userId}/lifecycle/deactivate";
-        $data = [
-            'deactivate' => true
-        ];
 
-        return $this->httpClientAdapter->post($url, $data);
+        return $this->httpClientAdapter->post($url,$sendEmail? ['sendEmail' => 'true'] : []);
     }
 
-    public function reactivateUser($userId)
+    public function reactivateUser($userId, bool $sendEmail)
     {
         $url =  "/api/v1/users/{$userId}/lifecycle/reactivate";
-        $data = [
-            'reactivate' => true
-        ];
 
-        return $this->httpClientAdapter->post($url, $data);
+        return $this->httpClientAdapter->post($url, $sendEmail? ['sendEmail' => 'true'] : []);
     }
 
     //user session
-    public function getUserSessions($userId)
+    public function revokeUserSession($userId)
     {
         $url =  "/api/v1/users/{$userId}/sessions";
 
-        return $this->httpClientAdapter->get($url);
-    }
-
-    public function revokeUserSession($userId, $sessionId)
-    {
-        $url =  "/api/v1/users/{$userId}/sessions/{$sessionId}";
-
         return $this->httpClientAdapter->delete($url);
     }
 
-    public function listUserCredentials($userId)
-    {
-        $url =  "/api/v1/users/{$userId}/credentials";
 
-        return $this->httpClientAdapter->get($url);
+    //credential operations
+
+    /**
+     * Generates a one-time token (OTT) that can be used to reset a user's password
+     *
+     * @param string $userId id of user
+     * @param bool $sendEmail Sends a forgot password email to the user if true
+     * @return mixed
+     */
+    public function forgotPasswordLink(string $userId, bool $sendEmail)
+   {
+       $url =  "/api/v1/users/{$userId}/credentials/forgot_password";
+
+       return $this->httpClientAdapter->post($url,$sendEmail? ['sendEmail' => 'true'] : []);
+   }
+
+    public function forgotPassword(string $userId, string $password, string $securityQuestionAnswer)
+    {
+        $url =  "/api/v1/users/{$userId}/credentials/forgot_password";
+
+        return $this->httpClientAdapter->post($url,[],[
+            'password' => [
+                "value" => $password
+            ],
+            "recovery_question" => [
+                "answer" => $securityQuestionAnswer
+            ]
+        ]);
     }
 
-    public function addUserCredential($userId, $credentialData)
+    public function changeRecoveryQuestion(string $userId, $password, $recoveryQuestion, $recoveryQuestionAnswer)
     {
-        $url =  "/api/v1/users/{$userId}/credentials";
+        $url =  "/api/v1/users/{$userId}/credentials/change_recovery_question";
 
-        return $this->httpClientAdapter->post($url, $credentialData);
-    }
-
-    public function updateUserCredential($userId, $credentialId, $credentialData)
-    {
-        $url =  "/api/v1/users/{$userId}/credentials/{$credentialId}";
-
-        return $this->httpClientAdapter->post($url, $credentialData);
-    }
-
-    public function deleteUserCredential($userId, $credentialId)
-    {
-        $url =  "/api/v1/users/{$userId}/credentials/{$credentialId}";
-
-        return $this->httpClientAdapter->delete($url);
+        return $this->httpClientAdapter->post($url,[],[
+            'password' => [
+                "value" => $password
+            ],
+            "recovery_question" => [
+                "question" => $recoveryQuestion,
+                "answer" => $recoveryQuestionAnswer
+            ]
+        ]);
     }
 
 }

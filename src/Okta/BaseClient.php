@@ -4,6 +4,7 @@ namespace Jmurphy\LaravelOkta\Okta;
 
 use Illuminate\Support\Facades\App;
 use Jmurphy\LaravelOkta\Okta\ConfigRepository as OktaConfigRepository;
+use Jmurphy\LaravelOkta\Okta\Entities\User\UserClient;
 
 class BaseClient
 {
@@ -14,7 +15,8 @@ class BaseClient
         HttpClientAdapterInterface $httpClientAdapter
     )
     {
-        $this->oktaConfigRepository = App::make(OktaConfigRepository::class);
+        //dd ('config: ' . config('laravel-okta.okta_base_url'));
+        $this->oktaConfigRepository = ConfigRepository::getInstance();
         $this->httpClientAdapter = $httpClientAdapter;
     }
 
@@ -24,5 +26,13 @@ class BaseClient
     public function getOktaConfigRepository(): OktaConfigRepository
     {
         return $this->oktaConfigRepository;
+    }
+
+    /**
+     * @return string
+     */
+    protected function getAuthorizationHeader(): string
+    {
+        return 'SSWS ' . $this->getOktaConfigRepository()->getApiKey();
     }
 }
