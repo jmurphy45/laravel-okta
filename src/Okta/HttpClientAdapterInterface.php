@@ -6,6 +6,8 @@ use Illuminate\Http\Client\Response;
 
 interface HttpClientAdapterInterface
 {
+    public function redirect($url,$queryParams);
+
     /**
      * Send a GET request.
      *

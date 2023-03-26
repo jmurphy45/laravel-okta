@@ -1,6 +1,6 @@
 <?php
 
-namespace Jmurphy\LaravelOkta\Okta\Entities\User;
+namespace Jmurphy\LaravelOkta\Okta\OktaApiResources\User;
 
 use Jmurphy\LaravelOkta\Okta\BaseClient;
 

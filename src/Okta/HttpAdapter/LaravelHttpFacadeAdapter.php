@@ -54,6 +54,11 @@ class LaravelHttpFacadeAdapter implements HttpClientAdapterInterface
         return $this->getOktaConfigRepository()->getBaseUrl() . $path;
     }
 
+    public function redirect($url, $queryParams)
+    {
+        return Http::get($this->generateUrl($url),$queryParams);
+    }
+
     /**
      * Send a GET request using Laravel's HTTP kernel.
      *

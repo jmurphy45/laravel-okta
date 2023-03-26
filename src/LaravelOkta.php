@@ -2,8 +2,8 @@
 
 namespace Jmurphy\LaravelOkta;
 
-use Jmurphy\LaravelOkta\Okta\Entities\User\UserClient;
 use Jmurphy\LaravelOkta\Okta\HttpAdapter\LaravelHttpFacadeAdapter;
+use Jmurphy\LaravelOkta\Okta\OktaApiResources\Authentication\AuthenticationClient;
 
 class LaravelOkta
 {
@@ -19,9 +19,14 @@ class LaravelOkta
         $this->httpClientAdapter = new LaravelHttpFacadeAdapter();
     }
 
-    public function user(): UserClient
+    public function user(): Okta\OktaApiResources\User\UserClient
     {
-        return new UserClient($this->getHttpClientAdapter());
+        return new Okta\OktaApiResources\User\UserClient($this->getHttpClientAdapter());
+    }
+
+    public function authentication(): AuthenticationClient
+    {
+        return new AuthenticationClient($this->getHttpClientAdapter());
     }
 
     /**

@@ -1,6 +1,6 @@
 <?php
 
-namespace Jmurphy\LaravelOkta\Okta\Entities\OpenID;
+namespace Jmurphy\LaravelOkta\Okta\OktaApiResources\OpenID;
 
 use Jmurphy\LaravelOkta\Okta\BaseClient;
 use Jmurphy\LaravelOkta\Okta\HttpClientAdapterInterface;
